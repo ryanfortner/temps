@@ -10,7 +10,7 @@
   "weather": {
     "url": {
       "actual": "http://api.openweathermap.org/data/2.5/weather?mode=json",
-      "daily": "http://api.openweathermap.org/data/2.5/forecast/daily?cnt=4&mode=json",
+      "daily": "http://api.openweathermap.org/data/2.5/forecast?cnt=40&mode=json",
       "hourly": "http://api.openweathermap.org/data/2.5/forecast?cnt=10&mode=json"
     }
   },

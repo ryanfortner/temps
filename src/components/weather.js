@@ -18,62 +18,62 @@ let chartjs = null
 
 const getWeatherByCity = function (url, city, option, callback) {
   superagent
-      .get(url)
-      .query({q: city})
-      .query({units: store.getFormat()})
-      .query({appid: store.getApiKey()})
-      .end(function (err, res) {
-        let loading = utils.getLoading
-        loading[option] = false
-        utils.setLoading(loading)
-        if (err || !res.ok) {
-          utils.showErrorMessage('Failure during data fetching')
-          console.log(err)
-        } else {
-          const wdata = store.getWdata()
-          wdata[option] = res.body
-          store.setWdata(wdata)
-          utils.checkLoading()
-          if (wdata[option].cod !== 404) {
-            store.setCity(city)
-            if (callback && typeof (callback) === 'function') {
-              callback()
-            }
-          } else {
-            utils.showErrorMessage(wdata[option].message)
+    .get(url)
+    .query({ q: city })
+    .query({ units: store.getFormat() })
+    .query({ appid: store.getApiKey() })
+    .end(function (err, res) {
+      let loading = utils.getLoading
+      loading[option] = false
+      utils.setLoading(loading)
+      if (err || !res.ok) {
+        utils.showErrorMessage('Failure during data fetching')
+        console.log(err)
+      } else {
+        const wdata = store.getWdata()
+        wdata[option] = res.body
+        store.setWdata(wdata)
+        utils.checkLoading()
+        if (wdata[option].cod !== 404) {
+          store.setCity(city)
+          if (callback && typeof (callback) === 'function') {
+            callback()
           }
+        } else {
+          utils.showErrorMessage(wdata[option].message)
         }
-      })
+      }
+    })
 }
 
 const getWeatherByCoord = function (url, lat, lon, option, callback) {
   superagent
-      .get(url)
-      .query({lat: lat})
-      .query({lon: lon})
-      .query({units: store.getFormat()})
-      .query({appid: store.getApiKey()})
-      .end(function (err, res) {
-        let loading = utils.getLoading
-        loading[option] = false
-        utils.setLoading(loading)
-        if (err || !res.ok) {
-          utils.showErrorMessage('Failure during data fetching')
-        } else {
-          const wdata = store.getWdata()
-          wdata[option] = res.body
-          store.setWdata(wdata)
-          utils.checkLoading()
-          if (wdata[option].cod !== 404) {
-            if (option === 0) store.setCity(wdata[option].name + ', ' + wdata[option].sys.country.toUpperCase())
-            if (callback && typeof (callback) === 'function') {
-              callback()
-            }
-          } else {
-            utils.showErrorMessage(wdata[option].message)
+    .get(url)
+    .query({ lat: lat })
+    .query({ lon: lon })
+    .query({ units: store.getFormat() })
+    .query({ appid: store.getApiKey() })
+    .end(function (err, res) {
+      let loading = utils.getLoading
+      loading[option] = false
+      utils.setLoading(loading)
+      if (err || !res.ok) {
+        utils.showErrorMessage('Failure during data fetching')
+      } else {
+        const wdata = store.getWdata()
+        wdata[option] = res.body
+        store.setWdata(wdata)
+        utils.checkLoading()
+        if (wdata[option].cod !== 404) {
+          if (option === 0) store.setCity(wdata[option].name + ', ' + wdata[option].sys.country.toUpperCase())
+          if (callback && typeof (callback) === 'function') {
+            callback()
           }
+        } else {
+          utils.showErrorMessage(wdata[option].message)
         }
-      })
+      }
+    })
 }
 
 const refreshInfo = function () {
@@ -94,6 +94,7 @@ const refreshWeather = function () {
   getWeatherByCity(config.weather.url.hourly, store.getCity(), 2)
 
   window.setTimeout(function () {
+    // console.log(wdata)
     if (store.getMbInfo() && wdata[0].cod !== 404) {
       ipcRenderer.send('set-title', {
         temperature: utils.roundTemp(wdata[0].main.temp),
@@ -149,18 +150,25 @@ const showWeatherData = function () {
 
 const showForecastWeatherData = function () {
   const wdata = store.getWdata()
+
   let items = jQuery('#details .forecast .forecast-item')
   items.each(function (i, item) {
-    jQuery('.item-' + i + ' .date').html(utils.getStyledDate(i))
-    jQuery('.item-' + i + ' .icon').html('<img src="../../assets/icons/' + wdata[1].list[i].weather[0].icon + '.png" width="60" alt="' + wdata[1].list[i].weather[0].description + '"/>')
-    jQuery('.item-' + i + ' .icon').attr('name', wdata[1].list[i].weather[0].icon)
-    if (NumAnimF[i] === null || NumAnimF[i] === undefined) {
-      NumAnimF[i] = new CountUp('temp-' + i, 0, utils.roundTemp(wdata[1].list[i].temp.day), 0, 2)
-      NumAnimF[i].start()
-    } else {
-      NumAnimF[i].update(utils.roundTemp(wdata[1].list[i].temp.day))
+    for (let k = 10 * i; k < wdata[1].cnt; k++) {
+      if (wdata[1].list[k].dt_txt.search('12:00:00') !== -1) {
+        jQuery('.item-' + i + ' .date').html(utils.getStyledDate(i))
+        jQuery('.item-' + i + ' .icon').html('<img src="../../assets/icons/' + wdata[1].list[k].weather[0].icon + '.png" width="60" alt="' + wdata[1].list[k].weather[0].description + '"/>')
+        jQuery('.item-' + i + ' .icon').attr('name', wdata[1].list[k].weather[0].icon)
+        if (NumAnimF[i] === null || NumAnimF[i] === undefined) {
+          NumAnimF[i] = new CountUp('temp-' + i, 0, utils.roundTemp(wdata[1].list[k].main.temp), 0, 2)
+          NumAnimF[i].start()  
+        } else {
+          NumAnimF[i].update(utils.roundTemp(wdata[1].list[k].main.temp))
+        }
+        jQuery('.item-' + i + ' .temp .unit').html('°')
+        break
+      }
     }
-    jQuery('.item-' + i + ' .temp .unit').html('°')
+    
   })
 
   jQuery('.forecast-item .icon').each(function (el) {
@@ -170,6 +178,7 @@ const showForecastWeatherData = function () {
       jQuery('#details .forecast-item svg circle').css('fill', color.getColor())
     })
   })
+
 }
 
 const showHourlyWeatherData = function () {
@@ -324,40 +333,40 @@ const getGeolocation = function () {
   utils.startLoading()
 
   superagent
-      .get(config.location.url)
-      .query({browser: 'chromium'})
-      .query({sensor: true})
-      .end(function (err, res) {
-        if (err || !res.ok) {
-          console.log(err)
-          utils.showErrorMessage('Failure during location fetching')
-        } else {
-          const lat = res.body.location.lat
-          const lon = res.body.location.lng
+    .get(config.location.url)
+    .query({ browser: 'chromium' })
+    .query({ sensor: true })
+    .end(function (err, res) {
+      if (err || !res.ok) {
+        console.log(err)
+        utils.showErrorMessage('Failure during location fetching')
+      } else {
+        const lat = res.body.location.lat
+        const lon = res.body.location.lng
 
-          utils.reset()
-          getWeatherByCoord(config.weather.url.actual, lat, lon, 0, showWeatherData)
-          getWeatherByCoord(config.weather.url.daily, lat, lon, 1, showForecastWeatherData)
-          getWeatherByCoord(config.weather.url.hourly, lat, lon, 2)
+        utils.reset()
+        getWeatherByCoord(config.weather.url.actual, lat, lon, 0, showWeatherData)
+        getWeatherByCoord(config.weather.url.daily, lat, lon, 1, showForecastWeatherData)
+        getWeatherByCoord(config.weather.url.hourly, lat, lon, 2)
 
-          const wdata = store.getWdata()
+        const wdata = store.getWdata()
 
-          window.setTimeout(function () {
-            if (store.getMbInfo() & wdata[0].cod !== 404) {
-              ipcRenderer.send('set-title', {
-                temperature: utils.roundTemp(wdata[0].main.temp),
-                location: store.getCity(),
-                icon: wdata[0].weather[0].icon
-              })
-            }
-            if (wdata[0].cod !== 404) {
-              timezone.getTimezone()
-            }
-          }, 500)
+        window.setTimeout(function () {
+          if (store.getMbInfo() & wdata[0].cod !== 404) {
+            ipcRenderer.send('set-title', {
+              temperature: utils.roundTemp(wdata[0].main.temp),
+              location: store.getCity(),
+              icon: wdata[0].weather[0].icon
+            })
+          }
+          if (wdata[0].cod !== 404) {
+            timezone.getTimezone()
+          }
+        }, 500)
 
-          window.setTimeout(color.colorPalette, 1000)
-        }
-      })
+        window.setTimeout(color.colorPalette, 1000)
+      }
+    })
 }
 
 const showRain = function (nbDrop = 100) {
