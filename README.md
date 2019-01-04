@@ -16,6 +16,11 @@ Temps
   <a href="https://travis-ci.org/jackd248/temps" title="build status"><img src="https://travis-ci.org/jackd248/temps.svg?branch=master&style=flat-square" /></a>
 </p>
 
+<p>
+  This is a fork of the wonderfull App Temps by <a href="https://github.com/jackd248/temps"><b>jackd248</b></a>.</br>
+  After some changes to the API from open weather map, the app seems broken a bit. So here is the fork where I try to fix       temps and try to keep it running :)
+</p>
+
 > Temps is a modern and minimal menubar application based on Electron with actual weather information and forecast for Windows, Mac and Linux.
 
 ![temps screenshot](assets/screenshot.jpg)
