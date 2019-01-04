@@ -2,11 +2,11 @@
   "name": "temps",
   "productName": "Temps",
   "website": "https://jackd248.github.io/temps/",
-  "version": "0.7.0",
+  "version": "0.7.2",
   "icon": "assets/app.png",
   "description": "A simple but smart menubar weather app",
   "main": "src/app.js",
-  "electronVersion": "1.4.12",
+  "electronVersion": "1.4.13",
   "keywords": [
     "electron",
     "temperature",

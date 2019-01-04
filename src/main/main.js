@@ -10,6 +10,7 @@ window.onload = function () {
   init()
 
   weather.refreshWeather()
+  weather.getGeolocation()
 
   loadEventListener()
 }

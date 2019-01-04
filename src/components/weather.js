@@ -47,6 +47,7 @@ const getWeatherByCity = function (url, city, option, callback) {
 }
 
 const getWeatherByCoord = function (url, lat, lon, option, callback) {
+  console.log(lon)
   superagent
     .get(url)
     .query({ lat: lat })
@@ -54,6 +55,8 @@ const getWeatherByCoord = function (url, lat, lon, option, callback) {
     .query({ units: store.getFormat() })
     .query({ appid: store.getApiKey() })
     .end(function (err, res) {
+      console.log(err)
+      console.log(res)
       let loading = utils.getLoading
       loading[option] = false
       utils.setLoading(loading)
@@ -160,7 +163,7 @@ const showForecastWeatherData = function () {
         jQuery('.item-' + i + ' .icon').attr('name', wdata[1].list[k].weather[0].icon)
         if (NumAnimF[i] === null || NumAnimF[i] === undefined) {
           NumAnimF[i] = new CountUp('temp-' + i, 0, utils.roundTemp(wdata[1].list[k].main.temp), 0, 2)
-          NumAnimF[i].start()  
+          NumAnimF[i].start()
         } else {
           NumAnimF[i].update(utils.roundTemp(wdata[1].list[k].main.temp))
         }
@@ -168,7 +171,7 @@ const showForecastWeatherData = function () {
         break
       }
     }
-    
+
   })
 
   jQuery('.forecast-item .icon').each(function (el) {
@@ -331,18 +334,26 @@ const showHourlyWeatherData = function () {
 const getGeolocation = function () {
   jQuery('.spinner').fadeIn()
   utils.startLoading()
+  // superagent
+  //   .get("http://ip-api.com/json/")
+  //   .end(function(err, res) {
+  //     console.log(err);
+  //     console.log(res.body.city);
+  //   }
+  // )
 
   superagent
-    .get(config.location.url)
-    .query({ browser: 'chromium' })
-    .query({ sensor: true })
+    .get("http://ip-api.com/json/")
+    // .query({ browser: 'chromium' })
+    // .query({ sensor: true })
     .end(function (err, res) {
       if (err || !res.ok) {
         console.log(err)
         utils.showErrorMessage('Failure during location fetching')
       } else {
-        const lat = res.body.location.lat
-        const lon = res.body.location.lng
+        console.log(res.body.lon)
+        const lat = res.body.lat
+        const lon = res.body.lon
 
         utils.reset()
         getWeatherByCoord(config.weather.url.actual, lat, lon, 0, showWeatherData)
