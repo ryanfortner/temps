@@ -2,7 +2,7 @@
   "name": "temps",
   "productName": "Temps",
   "website": "https://jackd248.github.io/temps/",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "icon": "assets/app.png",
   "description": "A simple but smart menubar weather app",
   "main": "src/app.js",
@@ -49,17 +49,17 @@
     "standard": "^8.3.0"
   },
   "dependencies": {
-    "electron": "1.4.12",
-    "menubar": "^5.1.0",
-    "auto-launch": "^5.0.1",
     "applescript": "^1.0.0",
+    "auto-launch": "^5.0.1",
+    "chart.js": "^2.2.1",
+    "countup.js": "^1.7.1",
+    "electron": "1.4.12",
     "jquery": "^3.1.1",
     "json-storage": "^2.1.1",
     "localStorage": "^1.0.3",
-    "chart.js": "^2.2.1",
-    "countup.js": "^1.7.1",
+    "menubar": "^5.1.0",
+    "moment": "^2.17.1",
     "semver": "^5.1.0",
-    "superagent": "^3.3.1",
-    "moment": "^2.17.1"
+    "superagent": "^3.3.1"
   }
 }

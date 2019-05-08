@@ -10,12 +10,14 @@ let timeoffset = config.timezone.offset
 
 const getTimezone = function () {
   const wdata = store.getWdata()
+  
   superagent
       .get(config.timezone.url)
       .query({location: wdata[0].coord.lat + ',' + wdata[0].coord.lon})
       .query({timestamp: Math.floor(Date.now() / 1000)})
       .query({key: config.timezone.apikey})
       .end(function (err, res) {
+        console.log(res)
         let loading = utils.getLoading()
         loading[3] = false
         utils.setLoading(loading)
@@ -46,6 +48,7 @@ const addSeconds = function (date, seconds) {
 }
 
 const getDate = function (date) {
+  // console.log(convertDateToUTC(date))
   return addSeconds(convertDateToUTC(date), timeoffset)
 }
 

@@ -55,8 +55,8 @@ const getWeatherByCoord = function (url, lat, lon, option, callback) {
     .query({ units: store.getFormat() })
     .query({ appid: store.getApiKey() })
     .end(function (err, res) {
-      console.log(err)
-      console.log(res)
+      // console.log(err)
+      // console.log(res)
       let loading = utils.getLoading
       loading[option] = false
       utils.setLoading(loading)
@@ -86,6 +86,14 @@ const refreshInfo = function () {
   }, config.start.interval)
 }
 
+const refreshLocationInfo = function () {
+  setInterval(function () {
+    // refreshWeather()
+    getGeolocation();
+    console.log('refresh location')
+  }, 2 * 3600000)
+}
+
 const refreshWeather = function () {
   jQuery('.spinner').fadeIn()
   utils.showAll()
@@ -97,7 +105,7 @@ const refreshWeather = function () {
   getWeatherByCity(config.weather.url.hourly, store.getCity(), 2)
 
   window.setTimeout(function () {
-    // console.log(wdata)
+    
     if (store.getMbInfo() && wdata[0].cod !== 404) {
       ipcRenderer.send('set-title', {
         temperature: utils.roundTemp(wdata[0].main.temp),
@@ -109,6 +117,7 @@ const refreshWeather = function () {
       timezone.getTimezone()
     }
   }, 500)
+
 
   window.setTimeout(color.colorPalette, 1000)
 }
@@ -342,10 +351,43 @@ const getGeolocation = function () {
   //   }
   // )
 
+  navigator.geolocation.getCurrentPosition(res => {
+    console.log(res)
+    const lat = res.coords.latitude
+    const lon = res.coords.longitude
+
+    utils.reset()
+    getWeatherByCoord(config.weather.url.actual, lat, lon, 0, showWeatherData)
+    getWeatherByCoord(config.weather.url.daily, lat, lon, 1, showForecastWeatherData)
+    getWeatherByCoord(config.weather.url.hourly, lat, lon, 2)
+
+    const wdata = store.getWdata()
+
+    window.setTimeout(function () {
+      if (store.getMbInfo() & wdata[0].cod !== 404) {
+        ipcRenderer.send('set-title', {
+          temperature: utils.roundTemp(wdata[0].main.temp),
+          location: store.getCity(),
+          icon: wdata[0].weather[0].icon
+        })
+      }
+      if (wdata[0].cod !== 404) {
+        timezone.getTimezone()
+      }
+    }, 500)
+
+    window.setTimeout(color.colorPalette, 1000)
+  }, err => {
+    console.log(err)
+    utils.showErrorMessage('Failure during location fetching')
+  });
+
+/*
   superagent
-    .get("http://ip-api.com/json/")
-    // .query({ browser: 'chromium' })
-    // .query({ sensor: true })
+    .get("https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAIyKnnlRNzl4zE8Msjii2YxzBVyquutuk")
+    // .get("http://ip-api.com/json/")
+    .query({ browser: 'chromium' })
+    .query({ sensor: true })
     .end(function (err, res) {
       if (err || !res.ok) {
         console.log(err)
@@ -378,6 +420,7 @@ const getGeolocation = function () {
         window.setTimeout(color.colorPalette, 1000)
       }
     })
+    */
 }
 
 const showRain = function (nbDrop = 100) {
@@ -410,6 +453,7 @@ const setNumAnimTemp = function (na) {
 exports.getWeatherByCity = getWeatherByCity
 exports.getWeatherByCoord = getWeatherByCoord
 exports.refreshInfo = refreshInfo
+exports.refreshLocationInfo = refreshLocationInfo
 exports.refreshWeather = refreshWeather
 exports.showWeatherData = showWeatherData
 exports.showForecastWeatherData = showForecastWeatherData

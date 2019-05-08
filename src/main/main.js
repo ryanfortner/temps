@@ -6,6 +6,7 @@ const store = require('./../utilities/store')
 const weather = require('./../components/weather')
 const utils = require('./../utilities/utils')
 
+
 window.onload = function () {
   init()
 
@@ -20,6 +21,7 @@ const loadEventListener = function () {
 
   utils.showDate()
   weather.refreshInfo()
+  weather.refreshLocationInfo()
 
   jQuery('input#city').keypress(function (e) {
     if (e.which === 13) {

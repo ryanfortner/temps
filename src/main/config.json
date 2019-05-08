@@ -4,7 +4,7 @@
   "apikey": "547bbdc38bd641bef6645cd2c4bc613f",
   "timezone": {
     "url": "https://maps.googleapis.com/maps/api/timezone/json",
-    "apikey": "AIzaSyD7CnHeMDQV_XCXlimoPwiPSB_83Wfq7LE",
+    "apikey": "AIzaSyAIyKnnlRNzl4zE8Msjii2YxzBVyquutuk",
     "offset": 0
   },
   "weather": {
@@ -17,7 +17,7 @@
   "location": {
     "url": "https://maps.googleapis.com/maps/api/browserlocation/json"
   },
-  "color": {
+  "color": { 
     "error" : "#444444",
     "list": ["#b1695a", "#DB9864", "#E3BB88", "#D0C7A8", "#B1C2A3", "#80BBB2", "#6D9E96", "#8F95A5", "#6F7685"]
   },

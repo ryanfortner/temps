@@ -17,6 +17,8 @@ const path = require('path')
 let autoLaunch = true
 let iconSetting = 'auto'
 
+process.env.GOOGLE_API_KEY = 'AIzaSyAIyKnnlRNzl4zE8Msjii2YxzBVyquutuk'
+
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
@@ -35,6 +37,7 @@ const mb = menubar({
   index: path.join('file://', __dirname, '/main/index.html'),
   icon: path.join(__dirname, '/../assets/IconTemplate.png'),
   width: 280,
+  // width: 780,
   height: 480,
   resizable: false,
   showDockIcon: false,

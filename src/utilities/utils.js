@@ -60,8 +60,8 @@ const toggleDetails = function () {
 }
 
 const showDate = function () {
-  jQuery('#details .header .date').html(getTodayDate())
-  jQuery('#main .clock').html(getTime())
+  // jQuery('#details .header .date').html(getTodayDate())
+  // jQuery('#main .clock').html(getTime())
   setInterval(function () {
     refreshClock()
   }, 60000)
