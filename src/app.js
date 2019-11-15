@@ -17,8 +17,6 @@ const path = require('path')
 let autoLaunch = true
 let iconSetting = 'auto'
 
-process.env.GOOGLE_API_KEY = 'AIzaSyAIyKnnlRNzl4zE8Msjii2YxzBVyquutuk'
-
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar

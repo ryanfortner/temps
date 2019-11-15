@@ -26,9 +26,14 @@ const getWeatherByCity = function (url, city, option, callback) {
       let loading = utils.getLoading
       loading[option] = false
       utils.setLoading(loading)
+      // console.log('wres: ', res)
       if (err || !res.ok) {
-        utils.showErrorMessage('Failure during data fetching')
-        console.log(err)
+        if (res.status === 404) {
+          utils.showErrorMessage('Place not found. Please try again :)')
+        } else {
+          utils.showErrorMessage('Failure during data fetching')
+        }
+        
       } else {
         const wdata = store.getWdata()
         wdata[option] = res.body
@@ -47,7 +52,7 @@ const getWeatherByCity = function (url, city, option, callback) {
 }
 
 const getWeatherByCoord = function (url, lat, lon, option, callback) {
-  console.log(lon)
+  // console.log(lon)
   superagent
     .get(url)
     .query({ lat: lat })
@@ -98,7 +103,7 @@ const refreshWeather = function () {
   jQuery('.spinner').fadeIn()
   utils.showAll()
   const wdata = store.getWdata()
-  utils.startLoading()
+  // utils.startLoading()
   utils.reset()
   getWeatherByCity(config.weather.url.actual, store.getCity(), 0, showWeatherData)
   getWeatherByCity(config.weather.url.daily, store.getCity(), 1, showForecastWeatherData)
@@ -342,7 +347,7 @@ const showHourlyWeatherData = function () {
 
 const getGeolocation = function () {
   jQuery('.spinner').fadeIn()
-  utils.startLoading()
+  // utils.startLoading()
   // superagent
   //   .get("http://ip-api.com/json/")
   //   .end(function(err, res) {
@@ -351,49 +356,49 @@ const getGeolocation = function () {
   //   }
   // )
 
-  navigator.geolocation.getCurrentPosition(res => {
-    console.log(res)
-    const lat = res.coords.latitude
-    const lon = res.coords.longitude
+  // navigator.geolocation.getCurrentPosition(res => {
+  //   console.log(res)
+  //   const lat = res.coords.latitude
+  //   const lon = res.coords.longitude
 
-    utils.reset()
-    getWeatherByCoord(config.weather.url.actual, lat, lon, 0, showWeatherData)
-    getWeatherByCoord(config.weather.url.daily, lat, lon, 1, showForecastWeatherData)
-    getWeatherByCoord(config.weather.url.hourly, lat, lon, 2)
+  //   utils.reset()
+  //   getWeatherByCoord(config.weather.url.actual, lat, lon, 0, showWeatherData)
+  //   getWeatherByCoord(config.weather.url.daily, lat, lon, 1, showForecastWeatherData)
+  //   getWeatherByCoord(config.weather.url.hourly, lat, lon, 2)
 
-    const wdata = store.getWdata()
+  //   const wdata = store.getWdata()
 
-    window.setTimeout(function () {
-      if (store.getMbInfo() & wdata[0].cod !== 404) {
-        ipcRenderer.send('set-title', {
-          temperature: utils.roundTemp(wdata[0].main.temp),
-          location: store.getCity(),
-          icon: wdata[0].weather[0].icon
-        })
-      }
-      if (wdata[0].cod !== 404) {
-        timezone.getTimezone()
-      }
-    }, 500)
+  //   window.setTimeout(function () {
+  //     if (store.getMbInfo() & wdata[0].cod !== 404) {
+  //       ipcRenderer.send('set-title', {
+  //         temperature: utils.roundTemp(wdata[0].main.temp),
+  //         location: store.getCity(),
+  //         icon: wdata[0].weather[0].icon
+  //       })
+  //     }
+  //     if (wdata[0].cod !== 404) {
+  //       timezone.getTimezone()
+  //     }
+  //   }, 500)
 
-    window.setTimeout(color.colorPalette, 1000)
-  }, err => {
-    console.log(err)
-    utils.showErrorMessage('Failure during location fetching')
-  });
+  //   window.setTimeout(color.colorPalette, 1000)
+  // }, err => {
+  //   console.log(err)
+  //   utils.showErrorMessage('Failure during location fetching')
+  // });
 
-/*
+
   superagent
-    .get("https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAIyKnnlRNzl4zE8Msjii2YxzBVyquutuk")
-    // .get("http://ip-api.com/json/")
+    // .get("https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAIyKnnlRNzl4zE8Msjii2YxzBVyquutuk")
+    .get("http://ip-api.com/json/")
     .query({ browser: 'chromium' })
     .query({ sensor: true })
     .end(function (err, res) {
       if (err || !res.ok) {
-        console.log(err)
+        // console.log(err)
         utils.showErrorMessage('Failure during location fetching')
       } else {
-        console.log(res.body.lon)
+        // console.log(res.body.lon)
         const lat = res.body.lat
         const lon = res.body.lon
 
@@ -420,7 +425,7 @@ const getGeolocation = function () {
         window.setTimeout(color.colorPalette, 1000)
       }
     })
-    */
+    
 }
 
 const showRain = function (nbDrop = 100) {
