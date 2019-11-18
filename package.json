@@ -12,7 +12,7 @@
     "temperature",
     "weather",
     "forecast",
-    "menuar"
+    "menubar"
   ],
   "scripts": {
     "start": "electron .",
