@@ -10,8 +10,9 @@ Temps
 <h5 align="center"></h5>
 
 <p align="center">
-  <a href="https://github.com/jackd248/temps/releases"><img src="https://img.shields.io/github/release/jackd248/temps.svg?style=flat-square" alt="Release"></a>
-  <a href="https://github.com/jackd248/temps/releases"><img src="https://img.shields.io/github/downloads/jackd248/temps/total.svg?style=flat-square" alt="Downloads" /></a>
+  <a href="https://github.com/musicpro/temps/releases"><img src="https://img.shields.io/github/v/release/musicpro/temps" alt="Release"></a>
+  <a href="https://github.com/musicpro/temps/releases"><img src="https://img.shields.io/github/downloads/musicpro/temps/totalsquare" alt="Downloads" /></a>
+  <a href="https://github.com/jackd248/temps/releases"><img src="https://img.shields.io/github/downloads/jackd248/temps/total?label=downloads%20original" alt="Downloads original" /></a>
   <a href="https://david-dm.org/jackd248/temps" title="dependencies status"><img src="https://david-dm.org/jackd248/temps/status.svg?style=flat-square" /></a>
   <a href="https://travis-ci.org/jackd248/temps" title="build status"><img src="https://travis-ci.org/jackd248/temps.svg?branch=master&style=flat-square" /></a>
 </p>
