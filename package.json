@@ -6,7 +6,7 @@
   "icon": "assets/app.png",
   "description": "A simple but smart menubar weather app",
   "main": "src/app.js",
-  "electronVersion": "1.4.13",
+  "electronVersion": "v16.0.4",
   "keywords": [
     "electron",
     "temperature",
